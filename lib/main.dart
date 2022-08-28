@@ -464,123 +464,6 @@ class _Result extends StatelessWidget {
         ),
         child: Column(
           children: [
-            ListTile(
-              leading: ClipOval(
-                child: Container(
-                  color: Colors.greenAccent,
-                  width: 48,
-                  height: 48,
-                  child: Center(
-                    child: Text(
-                      name1.substring(0, 1),
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
-                  ),
-                ),
-              ),
-              title: Text(name1),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(width: 72),
-                  Container(
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.greenAccent, width: 4),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Flexible(child: Text(date)),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.greenAccent, width: 2),
-                      ),
-                    ),
-                    child: Text(
-                      date,
-                      style: TextStyle(color: Colors.blueAccent),
-                    ),
-                  ),
-                  SizedBox(width: 24),
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.greenAccent,
-                      ),
-                      onPressed: () {},
-                      child: Text(date),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.greenAccent,
-                        backgroundColor: Colors.greenAccent.withOpacity(0.2),
-                      ),
-                      onPressed: () {},
-                      child: Text(date),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Result2 extends StatelessWidget {
-  final String name1;
-  final String name2;
-  final String date;
-  final int point1;
-  final int point2;
-  final int rate1;
-  final int rate2;
-  final int updated_rate1;
-  final int updated_rate2;
-
-  const _Result2({
-    Key? key,
-    required this.name1,
-    required this.name2,
-    required this.date,
-    required this.point1,
-    required this.point2,
-    required this.rate1,
-    required this.rate2,
-    required this.updated_rate1,
-    required this.updated_rate2,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Card(
-        elevation: 8,
-        shadowColor: Colors.grey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
             Row(
               children: [
                 Expanded(
@@ -671,7 +554,7 @@ class _Result2 extends StatelessWidget {
 class _ResultSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _Result2(
+    return _Result(
       name1: '山田 太郎',
       name2: '河合 優佑',
       date: '8月27日',
