@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return AdminMobilePage();
+                          return MyWidget();
                         }),
                       );
                     } catch (e) {
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return AdminMobilePage();
+                          return MyWidget();
                         }),
                       );
                     } catch (e) {
@@ -178,16 +178,49 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class AdminMobilePage extends StatelessWidget {
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          SideNavigation(),
+          NavigationRail(
+            destinations: const [
+              NavigationRailDestination(
+                icon: Icon(Icons.thumbs_up_down),
+                label: Text('ThumbsUpDown'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.people),
+                label: Text('People'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.face),
+                label: Text('Face'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.bookmark),
+                label: Text('Bookmark'),
+              ),
+            ],
+            selectedIndex: selectedIndex,
+            onDestinationSelected: (index) {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+          ),
           VerticalDivider(thickness: 1, width: 1),
           Expanded(
-            child: PostList(),
+            child: MainContents(index: selectedIndex),
           ),
         ],
       ),
@@ -195,42 +228,37 @@ class AdminMobilePage extends StatelessWidget {
   }
 }
 
-class SideNavigation extends StatefulWidget {
-  @override
-  _SideNavigationState createState() => _SideNavigationState();
-}
+class MainContents extends StatelessWidget {
+  const MainContents({super.key, required this.index});
 
-class _SideNavigationState extends State<SideNavigation> {
-  int selectedIndex = 0;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
-    return NavigationRail(
-      selectedIndex: selectedIndex,
-      onDestinationSelected: (index) {
-        setState(() {
-          selectedIndex = index;
-        });
-      },
-      destinations: [
-        NavigationRailDestination(
-          icon: Icon(Icons.thumbs_up_down),
-          label: Text('ThumbsUpDown'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.people),
-          label: Text('People'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.face),
-          label: Text('Face'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.bookmark),
-          label: Text('Bookmark'),
-        ),
-      ],
-    );
+    switch (index) {
+      case 1:
+        return Rankings();
+      case 2:
+        return Container(
+          child: ColoredBox(
+            color: Colors.blue[200]!,
+            child: const Center(
+              child: Text('Bookmark'),
+            ),
+          ),
+        );
+      case 3:
+        return Container(
+          child: ColoredBox(
+            color: Colors.green[200]!,
+            child: const Center(
+              child: Text('Yeah'),
+            ),
+          ),
+        );
+      default:
+        return PostList();
+    }
   }
 }
 
@@ -276,154 +304,6 @@ class _PostsHeader extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _Post extends StatelessWidget {
-  final String name;
-  final String message;
-  final String textReason;
-  final Color colorPrimary;
-  final Color colorPositive;
-  final String textPositive;
-  final Color colorNegative;
-  final String textNegative;
-
-  const _Post({
-    Key? key,
-    required this.name,
-    required this.message,
-    required this.textReason,
-    required this.colorPrimary,
-    required this.colorPositive,
-    required this.textPositive,
-    required this.colorNegative,
-    required this.textNegative,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Card(
-        elevation: 8,
-        shadowColor: Colors.grey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
-            ListTile(
-              leading: ClipOval(
-                child: Container(
-                  color: colorPrimary,
-                  width: 48,
-                  height: 48,
-                  child: Center(
-                    child: Text(
-                      name.substring(0, 1),
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
-                  ),
-                ),
-              ),
-              title: Text(name),
-              subtitle: Text('2 min ago'),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(width: 72),
-                  Container(
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: colorPrimary, width: 4),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Flexible(child: Text(message)),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: colorPrimary, width: 2),
-                      ),
-                    ),
-                    child: Text(
-                      textReason,
-                      style: TextStyle(color: Colors.blueAccent),
-                    ),
-                  ),
-                  SizedBox(width: 24),
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        primary: colorNegative,
-                      ),
-                      onPressed: () {},
-                      child: Text(textNegative),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        primary: colorPositive,
-                        backgroundColor: colorPositive.withOpacity(0.2),
-                      ),
-                      onPressed: () {},
-                      child: Text(textPositive),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PostGreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return _Post(
-      name: 'Pean',
-      message: 'Weak reason. No action required.',
-      textReason: 'Report Details',
-      colorPrimary: Colors.greenAccent,
-      colorPositive: Colors.greenAccent,
-      textPositive: 'Keep',
-      colorNegative: Colors.blueAccent,
-      textNegative: 'Archive',
-    );
-  }
-}
-
-class _PostRed extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return _Post(
-      name: 'Namaga Tema',
-      message: 'Not recomended for publication.',
-      textReason: 'Pending Reason',
-      colorPrimary: Colors.deepOrangeAccent,
-      colorPositive: Colors.blueAccent,
-      textPositive: 'Publish',
-      colorNegative: Colors.deepOrangeAccent,
-      textNegative: 'Decline',
     );
   }
 }
@@ -594,6 +474,113 @@ class PostList extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class Rankings extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 48),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          _RankingsHeader(),
+          Expanded(
+            child: ListView(
+              children: [
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+                _RankSample(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RankingsHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Text("らんきんぐ"));
+  }
+}
+
+class _Rank extends StatelessWidget {
+  final String name;
+  final int ranking;
+  final int rating;
+
+  const _Rank({
+    Key? key,
+    required this.name,
+    required this.ranking,
+    required this.rating,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Card(
+        elevation: 8,
+        shadowColor: Colors.grey,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipOval(
+                child: Container(
+                  color: Colors.greenAccent,
+                  width: 48,
+                  height: 48,
+                  child: Center(
+                    child: Text(
+                      ranking.toString(),
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              Text(name),
+              SizedBox(width: 8),
+              Text(
+                rating.toString(),
+                strutStyle: StrutStyle(height: 1.5, fontSize: 15),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RankSample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return _Rank(
+      name: '河合 優佑',
+      ranking: 10,
+      rating: 1480,
     );
   }
 }
