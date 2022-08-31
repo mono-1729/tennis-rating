@@ -3,15 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
 
-class UserState extends ChangeNotifier {
-  User? user;
-
-  void setUser(User newUser) {
-    user = newUser;
-    notifyListeners();
-  }
-}
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -20,7 +11,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   // メッセージ表示用
   String infoText = '';
-  // 入力したメールアドレス・パスワード
+  // 入力した名前・メールアドレス・パスワード
+  String name = '';
   String email = '';
   String password = '';
 
@@ -36,6 +28,15 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // 名前入力
+              TextFormField(
+                decoration: InputDecoration(labelText: '名前※ユーザー登録時のみ'),
+                onChanged: (String value) {
+                  setState(() {
+                    name = value;
+                  });
+                },
+              ),
               // メールアドレス入力
               TextFormField(
                 decoration: InputDecoration(labelText: 'メールアドレス'),

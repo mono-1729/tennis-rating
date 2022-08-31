@@ -1,5 +1,5 @@
 //import 'dart:ffi';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +8,7 @@ import 'config/config.dart';
 import 'login.dart';
 import 'result.dart';
 import 'ranking.dart';
+import 'addresult.dart';
 
 final configurations = Configurations();
 
@@ -29,6 +30,15 @@ void main() {
   runApp(RatingApp());
 }
 
+class UserState extends ChangeNotifier {
+  User? user;
+
+  void setUser(User newUser) {
+    user = newUser;
+    notifyListeners();
+  }
+}
+
 class RatingApp extends StatelessWidget {
   // ユーザーの情報を管理するデータ
   final UserState userState = UserState();
@@ -38,6 +48,7 @@ class RatingApp extends StatelessWidget {
     return ChangeNotifierProvider<UserState>(
       create: (context) => UserState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         // アプリ名
         title: 'ChatApp',
         theme: ThemeData(
@@ -63,37 +74,39 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
+      body: Column(
         children: [
-          NavigationRail(
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.thumbs_up_down),
-                label: Text('ThumbsUpDown'),
+          Divider(thickness: 1, height: 1),
+          Expanded(
+            child: MainContents(index: selectedIndex),
+          ),
+          BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list_outlined),
+                label: '試合結果一覧',
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.people),
-                label: Text('People'),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.format_list_numbered_outlined),
+                label: 'ランキング',
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.face),
-                label: Text('Face'),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.playlist_add_outlined),
+                label: '試合結果を追加',
               ),
-              NavigationRailDestination(
+              /*BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark),
-                label: Text('Bookmark'),
-              ),
+                label: 'Bookmark',
+              ),*/
             ],
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (index) {
+            currentIndex: selectedIndex,
+            selectedItemColor: Colors.greenAccent,
+            unselectedItemColor: Colors.grey[800],
+            onTap: (index) {
               setState(() {
                 selectedIndex = index;
               });
             },
-          ),
-          VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-            child: MainContents(index: selectedIndex),
           ),
         ],
       ),
@@ -112,15 +125,8 @@ class MainContents extends StatelessWidget {
       case 1:
         return Rankings();
       case 2:
-        return Container(
-          child: ColoredBox(
-            color: Colors.blue[200]!,
-            child: const Center(
-              child: Text('Bookmark'),
-            ),
-          ),
-        );
-      case 3:
+        return AddResultPage();
+      /*case 3:
         return Container(
           child: ColoredBox(
             color: Colors.green[200]!,
@@ -128,7 +134,7 @@ class MainContents extends StatelessWidget {
               child: Text('Hello'),
             ),
           ),
-        );
+        );*/
       default:
         return PostList();
     }

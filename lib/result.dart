@@ -196,7 +196,7 @@ class PostList extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          _PostsHeader(),
+          //_PostsHeader(),
           Expanded(
             child: ListView(
               children: [
