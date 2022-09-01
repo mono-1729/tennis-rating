@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import 'dart:async';
 import 'main.dart';
 
 class AddResultPage extends StatefulWidget {
@@ -14,8 +16,26 @@ class AddResultPage extends StatefulWidget {
 
 class _AddResultPageState extends State<AddResultPage> {
   // 入力した投稿メッセージ
-  String opponentName = '';
+  String opponentid = '';
+  String point1 = '';
+  String point2 = '';
   String ResultText = '';
+  String _labelText = '日付を選択';
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? selected = await showDatePicker(
+      locale: const Locale("ja"),
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year - 2),
+      lastDate: DateTime(DateTime.now().year + 1),
+    );
+    if (selected != null) {
+      setState(() {
+        _labelText = (DateFormat.yMMMd('ja')).format(selected);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,26 +50,54 @@ class _AddResultPageState extends State<AddResultPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        _labelText,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.date_range),
+                        onPressed: () => _selectDate(context),
+                      )
+                    ],
+                  ),
+                ),
+              ),
               TextFormField(
-                decoration: InputDecoration(labelText: '相手の名前'),
+                decoration: InputDecoration(labelText: '相手のID'),
                 onChanged: (String value) {
                   setState(() {
-                    opponentName = value;
+                    opponentid = value;
                   });
                 },
               ),
-              // 投稿メッセージ入力
-              TextFormField(
-                decoration: InputDecoration(labelText: '試合結果'),
-                // 複数行のテキスト入力
-                keyboardType: TextInputType.multiline,
-                // 最大3行
-                maxLines: 1,
-                onChanged: (String value) {
-                  setState(() {
-                    ResultText = value;
-                  });
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: '自分の得点'),
+                      onChanged: (String value) {
+                        setState(() {
+                          point1 = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: '相手の得点'),
+                      onChanged: (String value) {
+                        setState(() {
+                          point2 = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Container(
@@ -65,9 +113,11 @@ class _AddResultPageState extends State<AddResultPage> {
                         .collection('results') // コレクションID指定
                         .doc() // ドキュメントID自動生成
                         .set({
-                      'opponentName': opponentName,
-                      'email': email,
-                      'date': date
+                      'playerid': user.uid,
+                      'opponentid': opponentid,
+                      'point1': point1,
+                      'point2': point2,
+                      'date': date,
                     });
                   },
                 ),

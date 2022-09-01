@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
@@ -76,6 +77,16 @@ class _LoginPageState extends State<LoginPage> {
                       );
                       // ユーザー情報を更新
                       userState.setUser(result.user!);
+                      User? user = FirebaseAuth.instance.currentUser;
+                      Map<String, dynamic> insertObj = {
+                        'id': user!.uid,
+                        'name': name,
+                        'rating': 1500,
+                      };
+                      var doc = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid);
+                      await doc.set(insertObj);
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
