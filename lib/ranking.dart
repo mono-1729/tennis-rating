@@ -26,11 +26,11 @@ class Rankings extends StatelessWidget {
                 if (snapshot.hasData) {
                   final List<DocumentSnapshot> documents = snapshot.data!.docs;
                   return ListView(
-                    children: documents.map((document) {
+                    children: documents.asMap().entries.map((document) {
                       return _Rank(
-                        name: document['name'],
-                        rating: document['rating'],
-                        ranking: 1,
+                        name: document.value['name'],
+                        rating: document.value['rating'],
+                        ranking: document.key + 1,
                       );
                     }).toList(),
                   );
