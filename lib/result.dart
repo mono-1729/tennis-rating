@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
@@ -171,26 +173,12 @@ class _Result extends StatelessWidget {
   }
 }
 
-class _ResultSample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return _Result(
-      name1: '山田 太郎',
-      name2: '河合 優佑',
-      date: '8月27日',
-      point1: 3,
-      point2: 2,
-      rate1: 1500,
-      rate2: 1500,
-      updated_rate1: 1520,
-      updated_rate2: 1480,
-    );
-  }
-}
-
 class PostList extends StatelessWidget {
+  PostList();
   @override
   Widget build(BuildContext context) {
+    final UserState userState = Provider.of<UserState>(context);
+    final User user = userState.user!;
     return Container(
       padding: EdgeInsets.only(top: 48),
       child: Column(
@@ -198,18 +186,35 @@ class PostList extends StatelessWidget {
         children: [
           //_PostsHeader(),
           Expanded(
-            child: ListView(
-              children: [
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-                _ResultSample(),
-              ],
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('results')
+                  .orderBy('date')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                // データが取得できた場合
+                if (snapshot.hasData) {
+                  final List<DocumentSnapshot> documents = snapshot.data!.docs;
+                  // 取得した投稿メッセージ一覧を元にリスト表示
+                  return ListView(
+                    children: documents.map((document) {
+                      return _Result(
+                          name1: document['playername'],
+                          name2: document['opponentname'],
+                          date: document['date'],
+                          point1: document['point1'],
+                          point2: document['point2'],
+                          rate1: document['rate1'],
+                          rate2: document['rate2'],
+                          updated_rate1: document['updated_rate1'],
+                          updated_rate2: document['updated_rate2']);
+                    }).toList(),
+                  );
+                }
+                return Center(
+                  child: Text('読込中...'),
+                );
+              },
             ),
           ),
         ],

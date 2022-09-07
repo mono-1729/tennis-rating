@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,8 @@ import 'package:provider/provider.dart';
 class Rankings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final UserState userState = Provider.of<UserState>(context);
+    final User user = userState.user!;
     return Container(
       padding: EdgeInsets.only(top: 48),
       child: Column(
@@ -12,20 +16,29 @@ class Rankings extends StatelessWidget {
         children: [
           _RankingsHeader(),
           Expanded(
-            child: ListView(
-              children: [
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-                _RankSample(),
-              ],
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .orderBy('rating', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                // データが取得できた場合
+                if (snapshot.hasData) {
+                  final List<DocumentSnapshot> documents = snapshot.data!.docs;
+                  return ListView(
+                    children: documents.map((document) {
+                      return _Rank(
+                        name: document['name'],
+                        rating: document['rating'],
+                        ranking: 1,
+                      );
+                    }).toList(),
+                  );
+                }
+                return Center(
+                  child: Text('読込中...'),
+                );
+              },
             ),
           ),
         ],

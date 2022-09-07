@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +20,11 @@ class AddResultPage extends StatefulWidget {
 class _AddResultPageState extends State<AddResultPage> {
   // 入力した投稿メッセージ
   String opponentid = '';
-  String point1 = '';
-  String point2 = '';
+  int point1 = -1;
+  int point2 = -1;
   String ResultText = '';
   String _labelText = '日付を選択';
+  String ErrorText = "";
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
@@ -79,20 +83,30 @@ class _AddResultPageState extends State<AddResultPage> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(labelText: '自分の得点'),
                       onChanged: (String value) {
                         setState(() {
-                          point1 = value;
+                          if (value == "") point1 = -1;
+                          point1 = int.parse(value);
                         });
                       },
                     ),
                   ),
                   Expanded(
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       decoration: InputDecoration(labelText: '相手の得点'),
                       onChanged: (String value) {
                         setState(() {
-                          point2 = value;
+                          if (value == "") point2 = -1;
+                          point2 = int.parse(value);
                         });
                       },
                     ),
@@ -100,28 +114,67 @@ class _AddResultPageState extends State<AddResultPage> {
                 ],
               ),
               const SizedBox(height: 8),
+              Text(ErrorText),
+              const SizedBox(height: 8),
               Container(
                 width: double.infinity,
                 child: ElevatedButton(
                   child: Text('追加'),
                   onPressed: () async {
-                    final date =
-                        DateTime.now().toLocal().toIso8601String(); // 現在の日時
-                    final email = user.email; // AddPostPage のデータを参照
-                    // 投稿メッセージ用ドキュメント作成
-                    await FirebaseFirestore.instance
-                        .collection('results') // コレクションID指定
-                        .doc() // ドキュメントID自動生成
-                        .set({
-                      'playerid': user.uid,
-                      'opponentid': opponentid,
-                      'point1': point1,
-                      'point2': point2,
-                      'date': date,
-                    });
+                    if (opponentid == "") {
+                      setState(() {
+                        ErrorText = "相手のIDを入力してください";
+                      });
+                    } else if (_labelText == '日付を選択') {
+                      setState(() {
+                        ErrorText = "日付を入力してください";
+                      });
+                    } else if (point1 < 0 || point2 < 0) {
+                      setState(() {
+                        ErrorText = "得点を入力してください";
+                      });
+                    } else {
+                      final playerdoc = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .get();
+                      final opponentdoc = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(opponentid)
+                          .get();
+                      if (opponentdoc.exists) {
+                        final date =
+                            DateTime.now().toLocal().toIso8601String(); // 現在の日時
+                        final email = user.email; // AddPostPage のデータを参照
+                        // 投稿メッセージ用ドキュメント作成
+                        await FirebaseFirestore.instance
+                            .collection('results') // コレクションID指定
+                            .doc() // ドキュメントID自動生成
+                            .set({
+                          'playerid': user.uid,
+                          'playername': playerdoc["name"],
+                          'opponentid': opponentid,
+                          'opponentname': opponentdoc["name"],
+                          'point1': point1,
+                          'point2': point2,
+                          'rate1': playerdoc['rating'],
+                          'rate2': opponentdoc['rating'],
+                          'updated_rate1': 1500,
+                          'updated_rate2': 1500,
+                          'date': _labelText,
+                        });
+                        setState(() {
+                          ErrorText = "";
+                        });
+                      } else {
+                        setState(() {
+                          ErrorText = "相手のIDが間違っています";
+                        });
+                      }
+                    }
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),
