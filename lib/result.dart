@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'main.dart';
 
 class _PostsHeader extends StatelessWidget {
@@ -189,7 +190,7 @@ class PostList extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('results')
-                  .orderBy('date')
+                  .orderBy('date', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 // データが取得できた場合
@@ -201,7 +202,8 @@ class PostList extends StatelessWidget {
                       return _Result(
                           name1: document['playername'],
                           name2: document['opponentname'],
-                          date: document['date'],
+                          date: (DateFormat.yMMMd('ja'))
+                              .format(document['date'].toDate()),
                           point1: document['point1'],
                           point2: document['point2'],
                           rate1: document['rate1'],
@@ -212,7 +214,7 @@ class PostList extends StatelessWidget {
                   );
                 }
                 return Center(
-                  child: Text('読込中...'),
+                  child: Text('読み込み中...'),
                 );
               },
             ),
