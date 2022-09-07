@@ -1,5 +1,4 @@
 import 'dart:html';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +23,7 @@ class _AddResultPageState extends State<AddResultPage> {
   int point2 = -1;
   String ResultText = '';
   String _labelText = '日付を選択';
+  DateTime? date;
   String ErrorText = "";
 
   Future<void> _selectDate(BuildContext context) async {
@@ -36,6 +36,7 @@ class _AddResultPageState extends State<AddResultPage> {
     );
     if (selected != null) {
       setState(() {
+        date = selected;
         _labelText = (DateFormat.yMMMd('ja')).format(selected);
       });
     }
@@ -143,10 +144,6 @@ class _AddResultPageState extends State<AddResultPage> {
                           .doc(opponentid)
                           .get();
                       if (opponentdoc.exists) {
-                        final date =
-                            DateTime.now().toLocal().toIso8601String(); // 現在の日時
-                        final email = user.email; // AddPostPage のデータを参照
-                        // 投稿メッセージ用ドキュメント作成
                         await FirebaseFirestore.instance
                             .collection('results') // コレクションID指定
                             .doc() // ドキュメントID自動生成
@@ -161,7 +158,7 @@ class _AddResultPageState extends State<AddResultPage> {
                           'rate2': opponentdoc['rating'],
                           'updated_rate1': 1500,
                           'updated_rate2': 1500,
-                          'date': _labelText,
+                          'date': date,
                         });
                         setState(() {
                           ErrorText = "";

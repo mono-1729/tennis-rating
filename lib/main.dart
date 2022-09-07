@@ -51,7 +51,7 @@ class RatingApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         // アプリ名
-        title: 'ChatApp',
+        title: 'RatingApp',
         theme: ThemeData(
           // テーマカラー
           primarySwatch: Colors.blue,
