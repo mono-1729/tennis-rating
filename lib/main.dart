@@ -10,10 +10,12 @@ import 'login.dart';
 import 'result.dart';
 import 'ranking.dart';
 import 'addresult.dart';
+import 'mypage.dart';
 
 final configurations = Configurations();
 
-Future<void> init() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: FirebaseOptions(
     apiKey: configurations.apiKey,
@@ -23,11 +25,7 @@ Future<void> init() async {
     //authDomain: configurations.authDomain,
     //storageBucket: configurations.storageBucket,
   ));
-}
-
-void main() {
-  // 最初に表示するWidget
-  init();
+  final firebaseUser = await FirebaseAuth.instance.userChanges().first;
   runApp(RatingApp());
 }
 
@@ -57,7 +55,7 @@ class RatingApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // ログイン画面を表示
-        home: LoginPage(),
+        home: LoginCheck(),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -75,6 +73,7 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+  final UserState user = UserState();
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -99,10 +98,10 @@ class _MyWidgetState extends State<MyWidget> {
                 icon: Icon(Icons.playlist_add_outlined),
                 label: '試合結果を追加',
               ),
-              /*BottomNavigationBarItem(
-                icon: Icon(Icons.bookmark),
-                label: 'Bookmark',
-              ),*/
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle),
+                label: 'マイページ',
+              ),
             ],
             currentIndex: selectedIndex,
             selectedItemColor: Colors.greenAccent,
@@ -131,15 +130,8 @@ class MainContents extends StatelessWidget {
         return Rankings();
       case 2:
         return AddResultPage();
-      /*case 3:
-        return Container(
-          child: ColoredBox(
-            color: Colors.green[200]!,
-            child: const Center(
-              child: Text('Hello'),
-            ),
-          ),
-        );*/
+      case 3:
+        return MyPage();
       default:
         return PostList();
     }
