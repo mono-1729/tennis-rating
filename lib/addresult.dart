@@ -160,6 +160,11 @@ class _AddResultPageState extends State<AddResultPage> {
                           'updated_rate2': 1500,
                           'date': date,
                         });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('試合結果を追加しました'),
+                          ),
+                        );
                         setState(() {
                           ErrorText = "";
                         });

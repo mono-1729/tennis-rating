@@ -4,6 +4,54 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
 
+class LoginCheck extends StatefulWidget {
+  LoginCheck({Key? key}) : super(key: key);
+
+  @override
+  _LoginCheckState createState() => _LoginCheckState();
+}
+
+class _LoginCheckState extends State<LoginCheck> {
+  //ログイン状態のチェック(非同期で行う)
+  void checkUser() async {
+    final currentUser = await FirebaseAuth.instance.currentUser;
+    final userState = Provider.of<UserState>(context, listen: false);
+    if (currentUser == null) {
+      await Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return LoginPage();
+        }),
+      );
+    } else {
+      userState.setUser(currentUser);
+      await Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) {
+          return MyWidget();
+        }),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkUser();
+  }
+
+  //ログイン状態のチェック時はこの画面が表示される
+  //チェック終了後にホーム or ログインページに遷移する
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          child: Text("読み込み中..."),
+        ),
+      ),
+    );
+  }
+}
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
