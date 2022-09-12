@@ -143,6 +143,7 @@ class _AddResultPageState extends State<AddResultPage> {
                           .collection('users')
                           .doc(opponentid)
                           .get();
+                      //updated_rate1,updated_rate2=hoge(rate1,rate2,winner)
                       if (opponentdoc.exists) {
                         await FirebaseFirestore.instance
                             .collection('results') // コレクションID指定
