@@ -7,21 +7,23 @@ import 'main.dart';
 import 'mypage.dart';
 
 class EditProfilePage extends StatefulWidget {
-  EditProfilePage();
+  final String name; //上位Widgetから受け取りたいデータ
+  EditProfilePage({Key? key, required this.name}) : super(key: key);
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  _EditProfilePageState createState() => _EditProfilePageState(this.name);
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
   // 入力した投稿メッセージ
-
+  String ErrorText = '';
+  _EditProfilePageState(this.name);
+  String name;
   @override
   Widget build(BuildContext context) {
     // ユーザー情報を受け取る
     final UserState userState = Provider.of<UserState>(context);
     final User user = userState.user!;
-
     return Scaffold(
       body: Center(
         child: Container(
@@ -30,12 +32,49 @@ class _EditProfilePageState extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: '相手のID'),
+                initialValue: widget.name,
+                decoration: InputDecoration(labelText: '名前'),
                 onChanged: (String value) {
                   setState(() {
-                    //opponentid = value;
+                    name = value;
                   });
                 },
+              ),
+              SizedBox(height: 8),
+              Text(ErrorText),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    child: ElevatedButton(
+                      child: Text('戻る'),
+                      onPressed: () async {
+                        await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                            return MyWidget(selectedIndex: 3);
+                          }),
+                        );
+                      },
+                    ),
+                  ),
+                  Container(
+                    child: ElevatedButton(
+                      child: Text('保存'),
+                      onPressed: () async {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({'name': name});
+                        await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) {
+                            return MyWidget(selectedIndex: 3);
+                          }),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -66,15 +66,17 @@ class RatingApp extends StatelessWidget {
 }
 
 class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+  final int selectedIndex;
+  const MyWidget({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<MyWidget> createState() => _MyWidgetState(this.selectedIndex);
 }
 
 class _MyWidgetState extends State<MyWidget> {
   final UserState user = UserState();
-  int selectedIndex = 0;
+  _MyWidgetState(this.selectedIndex);
+  int selectedIndex;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
