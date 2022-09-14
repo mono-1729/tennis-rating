@@ -26,7 +26,7 @@ class _LoginCheckState extends State<LoginCheck> {
       userState.setUser(currentUser);
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) {
-          return MyWidget();
+          return MyWidget(selectedIndex: 0);
         }),
       );
     }
@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                         // チャット画面に遷移＋ログイン画面を破棄
                         await Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) {
-                            return MyWidget();
+                            return MyWidget(selectedIndex: 0);
                           }),
                         );
                       } catch (e) {
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return MyWidget();
+                          return MyWidget(selectedIndex: 0);
                         }),
                       );
                     } catch (e) {

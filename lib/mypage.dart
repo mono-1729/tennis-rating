@@ -31,7 +31,7 @@ class MyPage extends StatelessWidget {
                 rating: documents[0]['rating']);
           }
           return Center(
-            child: Text('読み込み中...'),
+            child: SizedBox(height: 8),
           );
         });
   }
@@ -82,7 +82,7 @@ class _MyPage extends StatelessWidget {
                 onPressed: () async {
                   await Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) {
-                      return EditProfilePage();
+                      return EditProfilePage(name: name);
                     }),
                   );
                 },
