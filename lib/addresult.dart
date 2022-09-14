@@ -67,7 +67,7 @@ class _AddResultPageState extends State<AddResultPage> {
                       IconButton(
                         icon: Icon(Icons.date_range),
                         onPressed: () => _selectDate(context),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -150,9 +150,7 @@ class _AddResultPageState extends State<AddResultPage> {
                             .doc() // ドキュメントID自動生成
                             .set({
                           'playerid': user.uid,
-                          'playername': playerdoc["name"],
                           'opponentid': opponentid,
-                          'opponentname': opponentdoc["name"],
                           'point1': point1,
                           'point2': point2,
                           'rate1': playerdoc['rating'],

@@ -5,55 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'main.dart';
 
-class _PostsHeader extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: ListTile(
-            leading: ClipOval(
-              child: Container(
-                color: Colors.grey[300],
-                width: 48,
-                height: 48,
-                child: Icon(
-                  Icons.storage,
-                  color: Colors.grey[800],
-                ),
-              ),
-            ),
-            title: Text('Posts'),
-            subtitle: Text('20 Posts'),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: ListTile(
-            leading: ClipOval(
-              child: Container(
-                color: Colors.grey[300],
-                width: 48,
-                height: 48,
-                child: Icon(
-                  Icons.style,
-                  color: Colors.grey[800],
-                ),
-              ),
-            ),
-            title: Text('All Types'),
-            subtitle: Text(''),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _Result extends StatelessWidget {
-  final String name1;
-  final String name2;
+  final String id1;
+  final String id2;
   final String date;
   final int point1;
   final int point2;
@@ -64,8 +18,8 @@ class _Result extends StatelessWidget {
 
   const _Result({
     Key? key,
-    required this.name1,
-    required this.name2,
+    required this.id1,
+    required this.id2,
     required this.date,
     required this.point1,
     required this.point2,
@@ -97,27 +51,7 @@ class _Result extends StatelessWidget {
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipOval(
-                                child: Container(
-                                  color: Colors.greenAccent,
-                                  width: 48,
-                                  height: 48,
-                                  child: Center(
-                                    child: Text(
-                                      name1.substring(0, 1),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 24),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Text(name1),
-                            ],
-                          ),
+                          child: icon(id: id1),
                         ),
                         Text('Rating:${rate1}→${updated_rate1}'),
                       ],
@@ -138,27 +72,7 @@ class _Result extends StatelessWidget {
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipOval(
-                                child: Container(
-                                  color: Colors.greenAccent,
-                                  width: 48,
-                                  height: 48,
-                                  child: Center(
-                                    child: Text(
-                                      name2.substring(0, 1),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 24),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Text(name2),
-                            ],
-                          ),
+                          child: icon(id: id2),
                         ),
                         Text('Rating:${rate2}→${updated_rate2}'),
                       ],
@@ -171,6 +85,50 @@ class _Result extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class icon extends StatelessWidget {
+  final String id;
+  const icon({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .where('id', isEqualTo: id)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final List<DocumentSnapshot> documents = snapshot.data!.docs;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipOval(
+                  child: Container(
+                    color: Colors.greenAccent,
+                    width: 48,
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        documents[0]['name'].substring(0, 1),
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Text(documents[0]['name']),
+              ],
+            );
+          }
+          return Center(
+            child: SizedBox(height: 48),
+          );
+        });
   }
 }
 
@@ -200,8 +158,8 @@ class PostList extends StatelessWidget {
                   return ListView(
                     children: documents.map((document) {
                       return _Result(
-                          name1: document['playername'],
-                          name2: document['opponentname'],
+                          id1: document['playerid'],
+                          id2: document['opponentid'],
                           date: (DateFormat.yMMMd('ja'))
                               .format(document['date'].toDate()),
                           point1: document['point1'],
