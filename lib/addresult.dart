@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,7 +144,20 @@ class _AddResultPageState extends State<AddResultPage> {
                           .collection('users')
                           .doc(opponentid)
                           .get();
-                      //updated_rate1,updated_rate2=hoge(rate1,rate2,winner)
+                      final updated_rate1;
+                      final updated_rate2;
+                      final w = 1 /
+                          (pow(
+                                  10,
+                                  (opponentdoc['rating'] -
+                                          playerdoc['rating']) /
+                                      400) +
+                              1);
+                      updated_rate1 =
+                          playerdoc['rating'] + ((1 - w) * 32).round();
+                      updated_rate2 =
+                          opponentdoc['rating'] - ((1 - w) * 32).round();
+
                       if (opponentdoc.exists) {
                         await FirebaseFirestore.instance
                             .collection('results') // コレクションID指定
@@ -155,8 +169,8 @@ class _AddResultPageState extends State<AddResultPage> {
                           'point2': point2,
                           'rate1': playerdoc['rating'],
                           'rate2': opponentdoc['rating'],
-                          'updated_rate1': 1500,
-                          'updated_rate2': 1500,
+                          'updated_rate1': updated_rate1,
+                          'updated_rate2': updated_rate2,
                           'date': date,
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
