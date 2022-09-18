@@ -64,32 +64,35 @@ class _MyPageState extends State<MyPageState> {
   String id;
   String imgUrl;
   int rating;
-  Image? _img;
+  Image? img;
 
-  Future<void> IndicateImage() async {
+  Future<void> IndicateImage(imgURL) async {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference imageRef = storage.ref(imgUrl);
     String imageUrl = await imageRef.getDownloadURL();
-    setState(() {
-      _img = Image.network(imageUrl);
-    });
+    if (mounted) {
+      setState(() {
+        img = Image.network(imageUrl);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    IndicateImage();
+    IndicateImage(imgUrl);
     return Scaffold(
       body: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-        if (_img != null) _img!,
-        SizedBox(height: 8),
-        Text(name),
-        SizedBox(height: 8),
-        SelectableText('ID：${id}'),
-        SizedBox(height: 8),
-        Text('レート：${rating}'),
-        SizedBox(height: 8),
-        if (_img != null)
+        if (img == null) Text('読み込み中…'),
+        if (img != null) img!,
+        if (img != null) SizedBox(height: 8),
+        if (img != null) Text(name),
+        if (img != null) SizedBox(height: 8),
+        if (img != null) SelectableText('ID：${id}'),
+        if (img != null) SizedBox(height: 8),
+        if (img != null) Text('レート：${rating}'),
+        if (img != null) SizedBox(height: 8),
+        if (img != null)
           Container(
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SizedBox(
@@ -99,7 +102,7 @@ class _MyPageState extends State<MyPageState> {
                   onPressed: () async {
                     await Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) {
-                        return EditProfilePage(name: name, img: _img!);
+                        return EditProfilePage(name: name, img: img!);
                       }),
                     );
                   },

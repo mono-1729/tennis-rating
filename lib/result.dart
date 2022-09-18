@@ -103,15 +103,16 @@ class IconState extends StatefulWidget {
 class _IconState extends State<IconState> {
   _IconState(this.id);
   String id;
-  String? imgUrl;
   Image? _img;
-  Future<void> IndicateImage() async {
+  Future<void> GetImage(imgURL) async {
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference imageRef = storage.ref(imgUrl);
+    Reference imageRef = storage.ref(imgURL);
     String imageUrl = await imageRef.getDownloadURL();
-    setState(() {
-      _img = Image.network(imageUrl);
-    });
+    if (mounted) {
+      setState(() {
+        _img = Image.network(imageUrl);
+      });
+    }
   }
 
   @override
@@ -124,8 +125,7 @@ class _IconState extends State<IconState> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<DocumentSnapshot> documents = snapshot.data!.docs;
-            imgUrl = documents[0]['imgURL'];
-            IndicateImage();
+            GetImage(documents[0]['imgURL']);
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
