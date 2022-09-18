@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -51,7 +52,7 @@ class _Result extends StatelessWidget {
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: icon(id: id1),
+                          child: IconState(id: id1),
                         ),
                         Text('Rating:${rate1}→${updated_rate1}'),
                       ],
@@ -72,7 +73,7 @@ class _Result extends StatelessWidget {
                         Container(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: icon(id: id2),
+                          child: IconState(id: id2),
                         ),
                         Text('Rating:${rate2}→${updated_rate2}'),
                       ],
@@ -88,12 +89,32 @@ class _Result extends StatelessWidget {
   }
 }
 
-class icon extends StatelessWidget {
-  final String id;
-  const icon({
+class IconState extends StatefulWidget {
+  String id;
+  IconState({
     Key? key,
     required this.id,
   }) : super(key: key);
+
+  @override
+  _IconState createState() => _IconState(this.id);
+}
+
+class _IconState extends State<IconState> {
+  _IconState(this.id);
+  String id;
+  Image? _img;
+  Future<void> GetImage(imgURL) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference imageRef = storage.ref(imgURL);
+    String imageUrl = await imageRef.getDownloadURL();
+    if (mounted) {
+      setState(() {
+        _img = Image.network(imageUrl);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -104,22 +125,18 @@ class icon extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<DocumentSnapshot> documents = snapshot.data!.docs;
+            GetImage(documents[0]['imgURL']);
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipOval(
-                  child: Container(
-                    color: Colors.greenAccent,
-                    width: 48,
-                    height: 48,
-                    child: Center(
-                      child: Text(
-                        documents[0]['name'].substring(0, 1),
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                      ),
+                if (_img != null)
+                  ClipOval(
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      child: _img!,
                     ),
                   ),
-                ),
                 SizedBox(width: 8),
                 Text(documents[0]['name']),
               ],

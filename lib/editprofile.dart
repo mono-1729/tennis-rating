@@ -8,17 +8,21 @@ import 'mypage.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String name; //上位Widgetから受け取りたいデータ
-  EditProfilePage({Key? key, required this.name}) : super(key: key);
+  final Image img;
+  EditProfilePage({Key? key, required this.name, required this.img})
+      : super(key: key);
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState(this.name);
+  _EditProfilePageState createState() =>
+      _EditProfilePageState(this.name, this.img);
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
   // 入力した投稿メッセージ
   String ErrorText = '';
-  _EditProfilePageState(this.name);
+  _EditProfilePageState(this.name, this.img);
   String name;
+  Image img;
   @override
   Widget build(BuildContext context) {
     // ユーザー情報を受け取る
@@ -31,6 +35,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Row(
+                children: [
+                  img,
+                  ElevatedButton(
+                    child: Text('画像を選択'),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
               TextFormField(
                 initialValue: widget.name,
                 decoration: InputDecoration(labelText: '名前'),
