@@ -68,7 +68,7 @@ class _MyPageState extends State<MyPageState> {
 
   Future<void> IndicateImage(imgURL) async {
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference imageRef = storage.ref(imgUrl);
+    Reference imageRef = storage.ref(imgURL);
     String imageUrl = await imageRef.getDownloadURL();
     if (mounted) {
       setState(() {
@@ -79,12 +79,21 @@ class _MyPageState extends State<MyPageState> {
 
   @override
   Widget build(BuildContext context) {
+    final UserState userState = Provider.of<UserState>(context);
+    final User user = userState.user!;
     IndicateImage(imgUrl);
     return Scaffold(
       body: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
         if (img == null) Text('読み込み中…'),
-        if (img != null) img!,
+        if (img != null)
+          ClipOval(
+            child: Container(
+              width: 64,
+              height: 64,
+              child: img!,
+            ),
+          ),
         if (img != null) SizedBox(height: 8),
         if (img != null) Text(name),
         if (img != null) SizedBox(height: 8),
@@ -102,7 +111,8 @@ class _MyPageState extends State<MyPageState> {
                   onPressed: () async {
                     await Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) {
-                        return EditProfilePage(name: name, img: img!);
+                        return EditProfilePage(
+                            name: name, img: img!, id: user.uid);
                       }),
                     );
                   },

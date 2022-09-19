@@ -132,8 +132,8 @@ class _IconState extends State<IconState> {
                 if (_img != null)
                   ClipOval(
                     child: Container(
-                      width: 48,
-                      height: 48,
+                      width: 32,
+                      height: 32,
                       child: _img!,
                     ),
                   ),
