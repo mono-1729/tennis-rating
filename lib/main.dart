@@ -55,7 +55,7 @@ class RatingApp extends StatelessWidget {
         theme: ThemeData(
           // テーマカラー
           primarySwatch: Colors.blue,
-          fontFamily: 'KosugiMaru',
+          //fontFamily: 'KosugiMaru',
           //textTheme: GoogleFonts.b612MonoTextTheme(
           //  Theme.of(context).textTheme,)
         ),
