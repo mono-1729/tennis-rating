@@ -52,7 +52,13 @@ class _RankingsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text("らんきんぐ"));
+        child: Text(
+          "ランキング",
+          style: TextStyle(
+            fontSize: 30,
+            fontFamily: 'KosugiMaru',
+          ),
+        ));
   }
 }
 
@@ -91,13 +97,19 @@ class _Rank extends StatelessWidget {
                   child: Center(
                     child: Text(
                       ranking.toString(),
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontFamily: 'KosugiMaru'),
                     ),
                   ),
                 ),
               ),
               SizedBox(width: 8),
-              Text(name),
+              Text(
+                name,
+                style: TextStyle(fontFamily: 'KosugiMaru'),
+              ),
               SizedBox(width: 8),
               Text(
                 rating.toString(),
@@ -107,17 +119,6 @@ class _Rank extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _RankSample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return _Rank(
-      name: '河合 優佑',
-      ranking: 10,
-      rating: 1480,
     );
   }
 }

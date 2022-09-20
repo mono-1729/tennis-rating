@@ -138,7 +138,10 @@ class _IconState extends State<IconState> {
                     ),
                   ),
                 SizedBox(width: 8),
-                Text(documents[0]['name']),
+                Text(
+                  documents[0]['name'],
+                  style: TextStyle(fontFamily: 'KosugiMaru'),
+                ),
               ],
             );
           }
@@ -146,6 +149,21 @@ class _IconState extends State<IconState> {
             child: SizedBox(height: 48),
           );
         });
+  }
+}
+
+class _PostsHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Text(
+          "試合結果",
+          style: TextStyle(
+            fontSize: 30,
+            fontFamily: 'KosugiMaru',
+          ),
+        ));
   }
 }
 
@@ -160,7 +178,7 @@ class PostList extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          //_PostsHeader(),
+          _PostsHeader(),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance

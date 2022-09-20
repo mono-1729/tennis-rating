@@ -1,5 +1,6 @@
 //import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,9 @@ class RatingApp extends StatelessWidget {
         theme: ThemeData(
           // テーマカラー
           primarySwatch: Colors.blue,
+          fontFamily: 'KosugiMaru',
+          //textTheme: GoogleFonts.b612MonoTextTheme(
+          //  Theme.of(context).textTheme,)
         ),
         // ログイン画面を表示
         home: LoginCheck(),

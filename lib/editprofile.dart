@@ -87,6 +87,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   imagePath != null
                       ? ClipOval(
@@ -103,6 +104,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             child: img,
                           ),
                         ),
+                  SizedBox(width: 8),
                   ElevatedButton(
                     child: Text('画像を選択'),
                     onPressed: () async {
