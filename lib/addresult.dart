@@ -63,7 +63,10 @@ class _AddResultPageState extends State<AddResultPage> {
                     children: <Widget>[
                       Text(
                         _labelText,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'KosugiMaru',
+                        ),
                       ),
                       IconButton(
                         icon: Icon(Icons.date_range),

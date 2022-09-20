@@ -85,7 +85,11 @@ class _MyPageState extends State<MyPageState> {
     return Scaffold(
       body: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-        if (img == null) Text('読み込み中…'),
+        if (img == null)
+          Text(
+            '読み込み中…',
+            style: TextStyle(fontFamily: 'KosugiMaru'),
+          ),
         if (img != null)
           ClipOval(
             child: Container(
@@ -95,7 +99,11 @@ class _MyPageState extends State<MyPageState> {
             ),
           ),
         if (img != null) SizedBox(height: 8),
-        if (img != null) Text(name),
+        if (img != null)
+          Text(
+            name,
+            style: TextStyle(fontFamily: 'KosugiMaru'),
+          ),
         if (img != null) SizedBox(height: 8),
         if (img != null) SelectableText('ID：${id}'),
         if (img != null) SizedBox(height: 8),
