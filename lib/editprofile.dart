@@ -138,26 +138,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   Text('利き手'),
                   SizedBox(width: 16),
                   DropdownButton(
-                    //4
-                    items: const [
-                      //5
-                      DropdownMenuItem(
-                        child: Text('右'),
-                        value: '右',
-                      ),
-                      DropdownMenuItem(
-                        child: Text('左'),
-                        value: '左',
-                      ),
-                    ],
-                    onChanged: (String? value) {
-                      setState(() {
-                        dominanthand = value!;
-                      });
-                    },
-                    //7
-                    value: dominanthand,
-                  ),
+                      //4
+                      items: const [
+                        //5
+                        DropdownMenuItem(
+                          child: Text(''),
+                          value: '',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('右'),
+                          value: '右',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('左'),
+                          value: '左',
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        setState(() {
+                          dominanthand = value!;
+                        });
+                      },
+                      //7
+                      value: dominanthand),
                 ],
               ),
               SizedBox(height: 8),
