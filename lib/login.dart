@@ -136,6 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                           'id': user!.uid,
                           'name': name,
                           'rating': 1500,
+                          'playstyle': "",
+                          'dominanthand': "",
                         };
                         var doc = await FirebaseFirestore.instance
                             .collection('users')

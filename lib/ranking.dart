@@ -92,14 +92,14 @@ class _Rank extends StatelessWidget {
               ClipOval(
                 child: Container(
                   color: Colors.greenAccent,
-                  width: 48,
-                  height: 48,
+                  width: 32,
+                  height: 32,
                   child: Center(
                     child: Text(
                       ranking.toString(),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 16,
                           fontFamily: 'KosugiMaru'),
                     ),
                   ),

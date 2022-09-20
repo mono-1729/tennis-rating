@@ -15,21 +15,31 @@ class EditProfilePage extends StatefulWidget {
   final String name; //上位Widgetから受け取りたいデータ
   final Image img;
   final String id;
+  final String playstyle;
+  final String dominanthand;
   EditProfilePage(
-      {Key? key, required this.name, required this.img, required this.id})
+      {Key? key,
+      required this.name,
+      required this.img,
+      required this.id,
+      required this.playstyle,
+      required this.dominanthand})
       : super(key: key);
 
   @override
-  _EditProfilePageState createState() =>
-      _EditProfilePageState(this.name, this.img, this.id);
+  _EditProfilePageState createState() => _EditProfilePageState(
+      this.name, this.img, this.id, this.playstyle, this.dominanthand);
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
   // 入力した投稿メッセージ
   String ErrorText = '';
-  _EditProfilePageState(this.name, this.img, this.id);
+  _EditProfilePageState(
+      this.name, this.img, this.id, this.playstyle, this.dominanthand);
   String name;
   String id;
+  String playstyle;
+  String dominanthand;
   Image img;
   String? imagePath;
   File? imageFile;
@@ -87,7 +97,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   imagePath != null
                       ? ClipOval(
@@ -119,6 +129,47 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onChanged: (String value) {
                   setState(() {
                     name = value;
+                  });
+                },
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('利き手'),
+                  SizedBox(width: 16),
+                  DropdownButton(
+                      //4
+                      items: const [
+                        //5
+                        DropdownMenuItem(
+                          child: Text(''),
+                          value: '',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('右'),
+                          value: '右',
+                        ),
+                        DropdownMenuItem(
+                          child: Text('左'),
+                          value: '左',
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        setState(() {
+                          dominanthand = value!;
+                        });
+                      },
+                      //7
+                      value: dominanthand),
+                ],
+              ),
+              SizedBox(height: 8),
+              TextFormField(
+                initialValue: widget.playstyle,
+                decoration: InputDecoration(labelText: 'プレイスタイル'),
+                onChanged: (String value) {
+                  setState(() {
+                    playstyle = value;
                   });
                 },
               ),
@@ -157,17 +208,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               .doc(id)
                               .update({'imgURL': downloadURL});
                         }*/
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(user.uid)
-                                .update({'name': name});
-                            await Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) {
-                                return MyWidget(selectedIndex: 3);
-                              }),
-                            );
                           }
-                          ;
+
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .update({'name': name});
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .update({'playstyle': playstyle});
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user.uid)
+                              .update({'dominanthand': dominanthand});
+                          await Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (context) {
+                              return MyWidget(selectedIndex: 3);
+                            }),
+                          );
                         }),
                   ),
                 ],

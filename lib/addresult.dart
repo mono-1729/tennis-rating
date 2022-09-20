@@ -149,18 +149,42 @@ class _AddResultPageState extends State<AddResultPage> {
                           .get();
                       final updated_rate1;
                       final updated_rate2;
-                      final w = 1 /
-                          (pow(
-                                  10,
-                                  (opponentdoc['rating'] -
-                                          playerdoc['rating']) /
-                                      400) +
-                              1);
-                      updated_rate1 =
-                          playerdoc['rating'] + ((1 - w) * 32).round();
-                      updated_rate2 =
-                          opponentdoc['rating'] - ((1 - w) * 32).round();
-
+                      if (point1 > point2) {
+                        final w = 1 /
+                            (pow(
+                                    10,
+                                    (opponentdoc['rating'] -
+                                            playerdoc['rating']) /
+                                        400) +
+                                1);
+                        updated_rate1 =
+                            playerdoc['rating'] + ((1 - w) * 32).round();
+                        updated_rate2 =
+                            opponentdoc['rating'] - ((1 - w) * 32).round();
+                      } else if (point1 < point2) {
+                        final w = 1 /
+                            (pow(
+                                    10,
+                                    (playerdoc['rating'] -
+                                            opponentdoc['rating']) /
+                                        400) +
+                                1);
+                        updated_rate1 =
+                            playerdoc['rating'] - ((1 - w) * 32).round();
+                        updated_rate2 =
+                            opponentdoc['rating'] + ((1 - w) * 32).round();
+                      } else {
+                        updated_rate1 = playerdoc['rating'];
+                        updated_rate2 = opponentdoc['rating'];
+                      }
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .update({'rating': updated_rate1});
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(opponentid)
+                          .update({'rating': updated_rate2});
                       if (opponentdoc.exists) {
                         await FirebaseFirestore.instance
                             .collection('results') // コレクションID指定

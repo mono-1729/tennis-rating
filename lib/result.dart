@@ -54,7 +54,25 @@ class _Result extends StatelessWidget {
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           child: IconState(id: id1),
                         ),
-                        Text('Rating:${rate1}→${updated_rate1}'),
+                        RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(text: 'Rating:${updated_rate1}'),
+                                if (updated_rate1 > rate1)
+                                  TextSpan(
+                                      text: '(+${updated_rate1 - rate1})',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      )),
+                                if (updated_rate1 < rate1)
+                                  TextSpan(
+                                      text: '(${updated_rate1 - rate1})',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ))
+                              ]),
+                        ),
                       ],
                     ),
                   ],
@@ -75,7 +93,25 @@ class _Result extends StatelessWidget {
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           child: IconState(id: id2),
                         ),
-                        Text('Rating:${rate2}→${updated_rate2}'),
+                        RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: [
+                                TextSpan(text: 'Rating:${updated_rate2}'),
+                                if (updated_rate2 > rate2)
+                                  TextSpan(
+                                      text: '(+${updated_rate2 - rate2})',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      )),
+                                if (updated_rate2 < rate2)
+                                  TextSpan(
+                                      text: '(${updated_rate2 - rate2})',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ))
+                              ]),
+                        ),
                       ],
                     ),
                   ],
