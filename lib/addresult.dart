@@ -177,15 +177,16 @@ class _AddResultPageState extends State<AddResultPage> {
                         updated_rate1 = playerdoc['rating'];
                         updated_rate2 = opponentdoc['rating'];
                       }
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user.uid)
-                          .update({'rating': updated_rate1});
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(opponentid)
-                          .update({'rating': updated_rate2});
                       if (opponentdoc.exists) {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user.uid)
+                            .update({'rating': updated_rate1});
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(opponentid)
+                            .update({'rating': updated_rate2});
+
                         await FirebaseFirestore.instance
                             .collection('results') // コレクションID指定
                             .doc() // ドキュメントID自動生成
