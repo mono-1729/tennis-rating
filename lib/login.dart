@@ -136,6 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                           'id': user!.uid,
                           'name': name,
                           'rating': 1500,
+                          'imgURL':
+                              "icons/baseline_account_circle_black_48dp.png",
                           'playstyle': "",
                           'dominanthand': "",
                         };

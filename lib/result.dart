@@ -33,94 +33,96 @@ class _Result extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       child: Card(
-        elevation: 8,
-        shadowColor: Colors.grey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          children: [
-            Row(
+          elevation: 8,
+          shadowColor: Colors.grey,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Column(
               children: [
-                Expanded(
-                    child: Column(
+                Row(
                   children: [
-                    Column(
+                    Expanded(
+                        child: Column(
                       children: [
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: IconState(id: id1),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                TextSpan(text: 'Rating:${updated_rate1}'),
-                                if (updated_rate1 > rate1)
-                                  TextSpan(
-                                      text: '(+${updated_rate1 - rate1})',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      )),
-                                if (updated_rate1 < rate1)
-                                  TextSpan(
-                                      text: '(${updated_rate1 - rate1})',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                      ))
-                              ]),
+                        Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: IconState(id: id1),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(color: Colors.black),
+                                  children: [
+                                    TextSpan(text: '${updated_rate1}'),
+                                    if (updated_rate1 > rate1)
+                                      TextSpan(
+                                          text: '(+${updated_rate1 - rate1})',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          )),
+                                    if (updated_rate1 < rate1)
+                                      TextSpan(
+                                          text: '(${updated_rate1 - rate1})',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                          ))
+                                  ]),
+                            ),
+                          ],
                         ),
                       ],
+                    )),
+                    Column(
+                      children: [
+                        Text('${point1}-${point2}'),
+                        Text(date),
+                      ],
                     ),
-                  ],
-                )),
-                Column(
-                  children: [
-                    Text('${point1}-${point2}'),
-                    Text(date),
+                    Expanded(
+                        child: Column(
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              child: IconState(id: id2),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                  style: TextStyle(color: Colors.black),
+                                  children: [
+                                    TextSpan(text: '${updated_rate2}'),
+                                    if (updated_rate2 > rate2)
+                                      TextSpan(
+                                          text: '(+${updated_rate2 - rate2})',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          )),
+                                    if (updated_rate2 < rate2)
+                                      TextSpan(
+                                          text: '(${updated_rate2 - rate2})',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                          ))
+                                  ]),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
                   ],
                 ),
-                Expanded(
-                    child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: IconState(id: id2),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                              style: TextStyle(color: Colors.black),
-                              children: [
-                                TextSpan(text: 'Rating:${updated_rate2}'),
-                                if (updated_rate2 > rate2)
-                                  TextSpan(
-                                      text: '(+${updated_rate2 - rate2})',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                      )),
-                                if (updated_rate2 < rate2)
-                                  TextSpan(
-                                      text: '(${updated_rate2 - rate2})',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                      ))
-                              ]),
-                        ),
-                      ],
-                    ),
-                  ],
-                )),
               ],
             ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 }
@@ -174,9 +176,15 @@ class _IconState extends State<IconState> {
                     ),
                   ),
                 SizedBox(width: 8),
-                Text(
-                  documents[0]['name'],
-                  style: TextStyle(fontFamily: 'KosugiMaru'),
+                SizedBox(
+                  width: 70,
+                  child: Text(
+                    documents[0]['name'],
+                    style: TextStyle(
+                      fontFamily: 'KosugiMaru',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             );

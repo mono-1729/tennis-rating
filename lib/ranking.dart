@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'result.dart';
 
 class Rankings extends StatelessWidget {
   @override
@@ -77,48 +78,55 @@ class _Rank extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Card(
-        elevation: 8,
-        shadowColor: Colors.grey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipOval(
-                child: Container(
-                  color: Colors.greenAccent,
-                  width: 32,
-                  height: 32,
-                  child: Center(
-                    child: Text(
-                      ranking.toString(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'KosugiMaru'),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              elevation: 8,
+              shadowColor: Colors.grey,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 48, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipOval(
+                      child: Container(
+                        color: Colors.greenAccent,
+                        width: 32,
+                        height: 32,
+                        child: Center(
+                          child: Text(
+                            ranking.toString(),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'KosugiMaru'),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(width: 24),
+                    SizedBox(
+                      width: 70,
+                      child: Text(
+                        name,
+                        style: TextStyle(fontFamily: 'KosugiMaru'),
+                      ),
+                    ),
+                    SizedBox(width: 24),
+                    Text(
+                      rating.toString(),
+                      strutStyle: StrutStyle(height: 1.5, fontSize: 15),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(width: 8),
-              Text(
-                name,
-                style: TextStyle(fontFamily: 'KosugiMaru'),
-              ),
-              SizedBox(width: 8),
-              Text(
-                rating.toString(),
-                strutStyle: StrutStyle(height: 1.5, fontSize: 15),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          ],
+        ));
   }
 }
