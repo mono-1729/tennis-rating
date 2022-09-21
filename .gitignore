@@ -16,6 +16,11 @@ migrate_working_dir/
 *.iws
 .idea/
 
+
+.github/
+firebase.json
+.firebaserc
+.firebase/
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -33,7 +38,6 @@ migrate_working_dir/
 /build/
 
 # Web related
-lib/generated_plugin_registrant.dart
 lib/config
 # Symbolication related
 app.*.symbols
